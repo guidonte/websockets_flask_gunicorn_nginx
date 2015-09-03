@@ -17,5 +17,4 @@ configurations.
     # Containers logs go to host's syslog. On Debian/Ubuntu do:
     $ tail -f /var/log/syslog
     # Check Nginx websockets endpoint log
-    $ cd docker
     $ docker exec -it $(docker ps | grep nginx | awk '{ print $1 }') tail -f /var/log/nginx/websocket.error.log
