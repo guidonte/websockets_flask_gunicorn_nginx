@@ -40,4 +40,4 @@ if __name__ == '__main__':
     # Don't user the reloader, or sometimes the local development server
     # will hang in the background because of gevent.hub.LoopExit:
     # LoopExit('This operation would block forever',)
-    socketio.run(app, use_reloader=False)
+    socketio.run(app, use_reloader=False, host='0.0.0.0')

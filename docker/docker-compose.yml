@@ -21,3 +21,25 @@ nginx:
     - app
   links:
     - app
+  log_driver: "syslog"
+
+vanilla:
+  build: .
+  volumes:
+    - ..:/srv/wfgn
+  ports:
+    - "5000:5000"
+  log_driver: "syslog"
+  command: ./runserver.py
+
+gunicorn:
+  build: .
+  volumes:
+    - ..:/srv/wfgn
+  environment:
+    - "POLICY_SERVER=false"
+    - "SERVER_NAME=localhost:8001"
+  ports:
+    - "8001:8001"
+  log_driver: "syslog"
+  command: gunicorn runserver:app -b :8001 -w 1 --worker-class socketio.sgunicorn.GeventSocketIOWorker --log-level debug --error-logfile /dev/stdout --access-logfile /dev/stdout
