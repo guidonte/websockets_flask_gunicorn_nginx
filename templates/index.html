@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Test Websockets</title>
+
+    <meta charset="UTF-8">
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.min-2.1.4.js') }}/"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/socket.io.min-0.9.16.js') }}/"></script>
+
+    <script type="text/javascript">
+        function setup_sockets()
+        {
+            var ws_url = '//' + document.domain + ':' + location.port + '/test-websockets';
+            var socket = io.connect(ws_url, {'transports': ['websocket'], 'try multiple transports': false});
+
+            socket.on('connect', function() {
+                $("#status").text("Connected");
+            });
+
+            socket.on('message', function(data) {
+                $("#message").prepend("<div>Message received at " + Date() + "</div>");
+            });
+        }
+
+        $(document).ready(function() {
+            setup_sockets();
+
+            $("button").click(function() {
+                $.ajax({
+                    method: "POST",
+                    url: "{{ url_for('message') }}",
+                });
+            });
+        });
+    </script>
+  </head>
+
+  <body>
+    <h1>Test Websockets</h1>
+
+    <h2 id="status">Not Connected</h2>
+
+    <button>Trigger message</button>
+    <div id="message" style="padding-top: 20px;"></div>
+  </body>
+</html>

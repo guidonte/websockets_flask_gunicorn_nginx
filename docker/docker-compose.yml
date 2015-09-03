@@ -1,0 +1,23 @@
+app:
+  build: .
+  volumes:
+    - ..:/srv/wfgn
+  environment:
+    - "POLICY_SERVER=false"
+    - "SERVER_NAME=localhost:80"
+  expose:
+    - "8001"
+  log_driver: "syslog"
+  command: gunicorn runserver:app -b :8001 -w 4 --worker-class socketio.sgunicorn.GeventSocketIOWorker --log-level debug --error-logfile /dev/stdout --access-logfile /dev/stdout
+
+nginx:
+  restart: always
+  build: ./nginx/
+  ports:
+    - "80:80"
+  expose:
+    - "80"
+  volumes_from:
+    - app
+  links:
+    - app
