@@ -13,8 +13,6 @@ configurations.
     # Run on Docker or port 80 (needs to be available: stop other webservers!)
     $ cd docker
     $ docker-compose build
-    $ docker-compose up -d
-    # Containers logs go to host's syslog. On Debian/Ubuntu do:
-    $ tail -f /var/log/syslog
+    $ docker-compose --x-networking up -d
     # Check Nginx websockets endpoint log
     $ docker exec -it $(docker ps | grep nginx | awk '{ print $1 }') tail -f /var/log/nginx/websocket.error.log

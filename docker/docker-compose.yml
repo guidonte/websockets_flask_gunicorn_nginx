@@ -7,7 +7,6 @@ app:
     - "SERVER_NAME=localhost:80"
   expose:
     - "8001"
-  log_driver: "syslog"
   command: gunicorn runserver:app -b :8001 -w 1 --worker-class socketio.sgunicorn.GeventSocketIOWorker --log-level debug --error-logfile /dev/stdout --access-logfile /dev/stdout
 
 nginx:
@@ -19,9 +18,6 @@ nginx:
     - "80"
   volumes_from:
     - app
-  links:
-    - app
-  log_driver: "syslog"
 
 vanilla:
   build: .
@@ -29,7 +25,6 @@ vanilla:
     - ..:/srv/wfgn
   ports:
     - "5000:5000"
-  log_driver: "syslog"
   command: ./runserver.py
 
 gunicorn:
@@ -41,5 +36,4 @@ gunicorn:
     - "SERVER_NAME=localhost:8001"
   ports:
     - "8001:8001"
-  log_driver: "syslog"
   command: gunicorn runserver:app -b :8001 -w 1 --worker-class socketio.sgunicorn.GeventSocketIOWorker --log-level debug --error-logfile /dev/stdout --access-logfile /dev/stdout
